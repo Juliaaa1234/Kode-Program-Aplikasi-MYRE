@@ -1,0 +1,675 @@
+#:import dp kivy.metrics.dp
+
+# ============================================================
+# WELCOME SCREEN
+# ============================================================
+
+<WelcomeScreen>:
+    name: "welcome"
+
+    canvas.before:
+        Color:
+            rgba: 0.1, 0.1, 0.25, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    FloatLayout:
+
+        MDCard:
+            id: box
+            orientation: "vertical"
+            spacing: "40dp"
+            padding: "40dp"
+            size_hint: .8, None
+            height: self.minimum_height
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            radius: [20]
+            elevation: 10
+            md_bg_color: rgba(0.15, 0.15, 0.25, 0.9)
+            opacity: 0  # Start invisible
+            
+            FitImage:
+                source: "assets/logoo fix.png"
+                size_hint: None, None
+                size: "150dp", "150dp"
+                pos_hint: {"center_x": 0.5}
+
+            MDLabel:
+                text: "Manage your activities more easily, more neatly, faster."
+                halign: "center"
+                theme_text_color: "Secondary"
+                font_size: "16sp"
+                size_hint_y: None
+                height: "50dp"
+
+            MDRaisedButton:
+                id: btn_next
+                text: "Start"
+                size_hint: .6, None
+                height: "50dp"
+                pos_hint: {"center_x": 0.5}
+                md_bg_color: app.theme_cls.primary_color
+                on_release:
+                    app.root.current = "login"
+
+# ============================================================
+# LOGIN SCREEN
+# ============================================================
+
+<LoginScreen>:
+    canvas.before:
+        Color:
+            rgba: 0.1, 0.1, 0.3, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    AnchorLayout:
+        anchor_x: "center"
+        anchor_y: "center"
+
+        MDCard:
+            orientation: 'vertical'
+            size_hint: None, None
+            size: "340dp", self.minimum_height
+            padding: "24dp"
+            spacing: "16dp"
+            radius: [20]
+            elevation: 8
+            md_bg_color: rgba(0.15, 0.15, 0.25, 0.9)
+
+            MDLabel:
+                text: "MYRE"
+                theme_font_style: "H3"
+                halign: "center"
+
+            MDTextField:
+                id: username
+                hint_text: "Username"
+                leading_icon: "account"
+                mode: "fill"
+                fill_color: rgba(0.2, 0.2, 0.3, 0.8)
+                radius: [10]
+
+            MDTextField:
+                id: password
+                hint_text: "Password"
+                leading_icon: "lock"
+                password: True
+                mode: "fill"
+                fill_color: rgba(0.2, 0.2, 0.3, 0.8)
+                radius: [10]
+
+            # ===== CAPTCHA =====
+            MDBoxLayout:
+                orientation: "horizontal"
+                size_hint_y: None
+                height: "48dp"
+                spacing: "8dp"
+
+                MDCheckbox:
+                    id: captcha_checkbox
+                    size_hint: None, None
+                    size: "36dp", "36dp"
+                    pos_hint: {"center_y": .5}
+                    on_active: root.on_captcha_checked(self, self.active)
+
+                MDLabel:
+                    text: "I'm not a robot"
+                    theme_text_color: "Secondary"
+                    valign: "middle"
+
+            MDRaisedButton:
+                text: "LOGIN"
+                size_hint_x: 1
+                height: "48dp"
+                md_bg_color: app.theme_cls.primary_color
+                on_release: root.try_login()
+
+            MDBoxLayout:
+                orientation: 'horizontal'
+                spacing: "5dp"
+                size_hint_y: None
+                height: self.minimum_height
+
+                MDLabel:
+                    text: "Don't have an account?"
+                    theme_font_style: "Body2"
+
+                MDTextButton:
+                    text: "Create account"
+                    on_release: app.root.current = "register"
+
+# ============================================================
+# REGISTER SCREEN
+# ============================================================
+
+<RegisterScreen>:
+    canvas.before:
+        Color:
+            rgba: 0.1, 0.1, 0.3, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    AnchorLayout:
+        anchor_x: "center"
+        anchor_y: "center"
+
+        MDCard:
+            orientation: 'vertical'
+            size_hint: None, None
+            size: "340dp", self.minimum_height
+            padding: "24dp"
+            spacing: "16dp"
+            radius: [20]
+            elevation: 8
+            md_bg_color: rgba(0.15, 0.15, 0.25, 0.9)
+
+            MDLabel:
+                text: "Create New Account"
+                theme_font_style: "H4"
+                halign: "center"
+
+            MDTextField:
+                id: reg_username
+                hint_text: "Username"
+                leading_icon: "account"
+                mode: "fill"
+                fill_color: rgba(0.2, 0.2, 0.3, 0.8)
+                radius: [10]
+
+            MDTextField:
+                id: reg_password
+                hint_text: "Password"
+                leading_icon: "lock"
+                password: True
+                mode: "fill"
+                fill_color: rgba(0.2, 0.2, 0.3, 0.8)
+                radius: [10]
+
+            MDTextField:
+                id: reg_confirm
+                hint_text: "Confirm Password"
+                leading_icon: "lock-check"
+                password: True
+                mode: "fill"
+                fill_color: rgba(0.2, 0.2, 0.3, 0.8)
+                radius: [10]
+
+            # ===== CAPTCHA =====
+            MDBoxLayout:
+                orientation: "horizontal"
+                size_hint_y: None
+                height: "48dp"
+                spacing: "8dp"
+
+                MDCheckbox:
+                    id: reg_captcha_checkbox
+                    size_hint: None, None
+                    size: "36dp", "36dp"
+                    pos_hint: {"center_y": .5}
+                    on_active: root.on_captcha_checked(self, self.active)
+
+                MDLabel:
+                    text: "I'm not a robot"
+                    theme_text_color: "Secondary"
+                    valign: "middle"
+
+            MDRaisedButton:
+                text: "REGISTER"
+                size_hint_x: 1
+                height: "48dp"
+                md_bg_color: app.theme_cls.primary_color
+                on_release: root.try_register()
+
+            MDTextButton:
+                text: "Back to Login"
+                halign: "center"
+                on_release: app.root.current = "login"
+
+# ============================================================
+# BOTTOM NAVBAR
+# ============================================================
+
+<NavBar@MDBoxLayout>:
+    orientation: 'horizontal'
+    size_hint_y: None
+    height: "60dp"
+    padding: "15dp", "5dp", "5dp", "5dp"
+    spacing: "16dp"
+    md_bg_color: app.theme_cls.primary_color
+
+    Widget:
+        size_hint_x: 30
+
+    MDFillRoundFlatIconButton:
+        icon: "home"
+        size_hint_x: None
+        width: "80dp"
+        icon_size: "36dp"
+        on_release: app.root.current = 'home'
+
+    MDFillRoundFlatIconButton:
+        icon: "school"
+        size_hint_x: None
+        width: "80dp"
+        icon_size: "36dp"
+        on_release: app.root.current = 'jadwal'
+
+    MDFillRoundFlatIconButton:
+        icon: "calendar"
+        size_hint_x: None
+        width: "80dp"
+        icon_size: "36dp"
+        on_release: app.root.current = 'calendar'
+
+    MDFillRoundFlatIconButton:
+        icon: "account"
+        size_hint_x: None
+        width: "80dp"
+        icon_size: "36dp"
+        on_release: app.root.current = 'profile'
+
+# ============================================================
+# HOME SCREEN
+# ============================================================
+
+<HomeScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+
+        MDTopAppBar:
+            title: "Home"
+            elevation: 10
+            md_bg_color: app.theme_cls.primary_color
+            size_hint_y: None
+            height: "32dp"
+
+        ScrollView:
+            size_hint_y: 1
+            do_scroll_x: False
+            do_scroll_y: True
+
+            MDBoxLayout:
+                orientation: 'vertical'
+                padding: "20dp"
+                spacing: "30dp"
+                size_hint_y: None
+                height: self.minimum_height
+                canvas.before:
+                    Color:
+                        rgba: 0.05, 0.05, 0.1, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+                # ===========================
+                # TO-DO LIST
+                # ===========================
+                MDBoxLayout:
+                    orientation: 'horizontal'
+                    size_hint_y: None
+                    height: "56dp"
+                    spacing: "10dp"
+
+                    MDIcon:
+                        icon: "clipboard-list"
+                        theme_text_color: "Primary"
+                        size_hint: None, None
+                        size: "40dp", "56dp"
+                        pos_hint: {"center_y": 0.5}
+
+                    MDLabel:
+                        text: "To-Do List"
+                        theme_font_style: "H4"
+                        theme_text_color: "Primary"
+                        size_hint: 1, None
+                        height: "56dp"
+                        pos_hint: {"center_y": 0.5}
+                        text_size: 9999, None
+                        max_lines: 1
+
+                    MDIconButton:
+                        icon: "plus"
+                        size_hint: None, None
+                        size: "32dp", "32dp"
+                        md_bg_color: app.theme_cls.accent_color
+                        pos_hint: {"center_y": 0.5}
+                        on_release: root.add_todo()
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "20dp"
+                    radius: 20
+                    elevation: 6
+                    size_hint_y: None
+                    height: min(todo_container.height + dp(60), dp(320))
+                    md_bg_color: [0, 0, 0, 0]
+
+                    ScrollView:
+                        bar_width: 0
+                        do_scroll_x: False
+
+                        MDList:
+                            id: todo_container
+                            size_hint_y: None
+                            height: self.minimum_height
+
+                # ===========================
+                # JADWAL HARI INI
+                # ===========================
+                MDBoxLayout:
+                    orientation: 'horizontal'
+                    size_hint_y: None
+                    height: "56dp"
+                    spacing: "10dp"
+
+                    MDIcon:
+                        icon: "calendar-today"
+                        theme_text_color: "Primary"
+                        size_hint: None, None
+                        size: "40dp", "56dp"
+                        pos_hint: {"center_y": 0.5}
+
+                    MDLabel:
+                        text: "Today's Schedule"
+                        theme_font_style: "H4"
+                        theme_text_color: "Primary"
+                        size_hint: 1, None
+                        height: "56dp"
+                        pos_hint: {"center_y": 0.5}
+                        text_size: self.width, None
+                        max_lines: 1
+
+                MDCard:
+                    orientation: 'vertical'
+                    padding: "20dp"
+                    radius: 20
+                    elevation: 6
+                    size_hint_y: None
+                    height: min(jadwal_container.height + dp(60), dp(320))
+                    md_bg_color: [0, 0, 0, 0]
+
+                    ScrollView:
+                        bar_width: 0
+                        do_scroll_x: False
+
+                        MDList:
+                            id: jadwal_container
+                            size_hint_y: None
+                            height: self.minimum_height
+
+                # ===========================
+                # TUGAS / PROJEK
+                # ===========================
+                MDBoxLayout:
+                    orientation: 'horizontal'
+                    size_hint_y: None
+                    height: "56dp"
+                    spacing: "10dp"
+
+                    MDIcon:
+                        icon: "clipboard-text"
+                        theme_text_color: "Primary"
+                        size_hint: None, None
+                        size: "40dp", "56dp"
+                        pos_hint: {"center_y": 0.5}
+
+                    MDLabel:
+                        text: "Tasks/Projects"
+                        theme_font_style: "H4"
+                        theme_text_color: "Primary"
+                        size_hint: 1, None
+                        height: "56dp"
+                        pos_hint: {"center_y": 0.5}
+                        text_size: 9999, None
+                        max_lines: 1
+
+                    MDIconButton:
+                        icon: "plus"
+                        size_hint: None, None
+                        size: "32dp", "32dp"
+                        md_bg_color: app.theme_cls.accent_color
+                        pos_hint: {"center_y": 0.5}
+                        on_release: root.add_tugas()
+
+                MDCard:
+                    orientation: 'vertical'
+                    padding: "20dp"
+                    radius: 20
+                    elevation: 6
+                    size_hint_y: None
+                    height: min(tugas_container.height + dp(60), dp(320))
+                    md_bg_color: [0, 0, 0, 0]
+
+                    ScrollView:
+                        bar_width: 0
+                        do_scroll_x: False
+
+                        MDList:
+                            id: tugas_container
+                            size_hint_y: None
+                            height: self.minimum_height
+                            spacing: "10dp"
+
+        NavBar:
+
+# ============================================================
+# JADWAL KULIAH SCREEN
+# ============================================================
+
+<JadwalKuliahScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+
+        MDTopAppBar:
+            title: "Class Schedule"
+            elevation: 10
+            md_bg_color: app.theme_cls.primary_color
+            size_hint_y: None
+            height: "32dp"
+
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            canvas.before:
+                Color:
+                    rgba: 0.05, 0.05, 0.1, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            MDBoxLayout:
+                orientation: 'vertical'
+                padding: "15dp"
+                spacing: "25dp"
+                size_hint_y: None
+                height: self.minimum_height
+
+                # ===========================
+                # JUDUL + TOMBOL TAMBAH
+                # ===========================
+                MDBoxLayout:
+                    orientation: 'horizontal'
+                    adaptive_height: True
+                    spacing: "15dp"
+
+                    MDIcon:
+                        icon: "school"
+                        theme_text_color: "Primary"
+                        size_hint: None, None
+                        size: "40dp", "40dp"
+                        pos_hint: {"center_y": 0.5}
+
+                    MDLabel:
+                        text: "Class Schedule"
+                        theme_font_style: "H5"
+                        theme_text_color: "Primary"
+                        size_hint_x: 0.8
+                        pos_hint: {"center_y": 0.5}
+
+                    MDIconButton:
+                        icon: "plus"
+                        size_hint: None, None
+                        size: "32dp", "32dp"
+                        md_bg_color: app.theme_cls.accent_color
+                        on_release: root.show_add_jadwal_dialog()
+
+                # ===========================
+                # CARD UTAMA 
+                # ===========================
+                MDCard:
+                    orientation: "vertical"
+                    padding: "15dp"
+                    radius: 20
+                    elevation: 6
+                    size_hint_y: None
+                    size_hint_x: 1             
+                    height: jadwal_list_container.height + dp(80)
+                    md_bg_color: [0, 0, 0, 0]
+
+                    ScrollView:
+                        bar_width: 0
+                        do_scroll_x: False
+
+                        MDList:
+                            id: jadwal_list_container
+                            size_hint_y: None
+                            height: self.minimum_height
+
+        NavBar:
+
+# ============================================================
+# CALENDAR SCREEN
+# ============================================================
+
+<CalendarScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+
+        MDTopAppBar:
+            title: "Calendar"
+            elevation: 10
+            md_bg_color: app.theme_cls.primary_color
+            size_hint_y: None
+            height: "32dp"
+
+        MDBoxLayout:
+            orientation: 'vertical'
+            padding: "15dp"
+            spacing: "15dp"
+            adaptive_height: True
+            canvas.before:
+                Color:
+                    rgba: 0.05, 0.05, 0.1, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            MDLabel:
+                text: "Select Month:"
+                halign: "center"
+                theme_font_style: "H6"
+                theme_text_color: "Primary"
+
+            Spinner:
+                id: month_dropdown
+                values: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+                text: "January"
+                size_hint: None, None
+                size: "220dp", "50dp"
+                pos_hint: {"center_x": 0.5}
+                md_bg_color: rgba(0.15, 0.15, 0.25, 0.8)
+                on_text: root.on_month_select(self, self.text)
+
+        ScrollView:
+            do_scroll_x: True
+            do_scroll_y: True
+            bar_width: "5dp"
+            canvas.before:
+                Color:
+                    rgba: 0.05, 0.05, 0.1, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            GridLayout:
+                id: calendar_grid
+                cols: 7
+                spacing: "5dp"
+                padding: "10dp"
+                size_hint_x: None
+                width: dp(672)
+                size_hint_y: None
+                height: self.minimum_height
+
+        NavBar:
+
+# ============================================================
+# PROFILE SCREEN
+# ============================================================
+
+<ProfileScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+
+        MDTopAppBar:
+            title: "Profile"
+            elevation: 10
+            md_bg_color: app.theme_cls.primary_color
+            size_hint_y: None
+            height: "32dp"
+
+        ScrollView:
+            canvas.before:
+                Color:
+                    rgba: 0.05, 0.05, 0.1, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            MDBoxLayout:
+                orientation: 'vertical'
+                padding: "30dp"
+                spacing: "25dp"
+                adaptive_height: True
+
+                MDTextField:
+                    id: nama_field
+                    hint_text: "Full Name"
+                    leading_icon: "account"
+                    mode: "fill"
+                    radius: [10]
+                    fill_color: rgba(0.2, 0.2, 0.3, 0.8)
+
+                MDTextField:
+                    id: nim_field
+                    hint_text: "NIM"
+                    leading_icon: "card-account-details"
+                    mode: "fill"
+                    radius: [10]
+                    fill_color: rgba(0.2, 0.2, 0.3, 0.8)
+
+                MDTextField:
+                    id: ipk_field
+                    hint_text: "IPK"
+                    leading_icon: "school"
+                    mode: "fill"
+                    radius: [10]
+                    fill_color: rgba(0.2, 0.2, 0.3, 0.8)
+
+                MDRaisedButton:
+                    text: "SAVE PROFILE"
+                    size_hint_x: 0.8
+                    pos_hint: {"center_x": 0.5}
+                    md_bg_color: app.theme_cls.primary_color
+                    on_release: root.save_profile()
+
+                MDRaisedButton:
+                    text: "LOGOUT"
+                    size_hint_x: 0.8
+                    pos_hint: {"center_x": 0.5}
+                    md_bg_color: app.theme_cls.error_color
+                    on_release: root.logout()
+
+        NavBar:
